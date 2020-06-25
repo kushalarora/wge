@@ -13,7 +13,8 @@ import types
 import json
 import warnings
 from abc import ABCMeta, abstractmethod, abstractproperty
-from collections import OrderedDict, defaultdict, MutableMapping, Mapping
+from collections import OrderedDict, defaultdict
+from collections.abc import MutableMapping, Mapping
 from contextlib import contextmanager
 
 import numpy as np

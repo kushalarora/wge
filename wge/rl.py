@@ -5,7 +5,8 @@ from operator import itemgetter
 import logging
 import numpy as np
 
-from collections import namedtuple, MutableSequence
+from collections import namedtuple
+from collections.abc import MutableSequence
 
 from torch.autograd import Variable
 from torch.nn import Module
