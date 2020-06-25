@@ -21,9 +21,7 @@ class HiddenState(object):
     pass
 
 
-class Action(object):
-    __metaclass__ = ABCMeta
-
+class Action(object, metaclass=ABCMeta):
     @property
     def justification(self):
         """Return a Justification object."""
@@ -48,9 +46,7 @@ class Action(object):
         return not self.__eq__(other)
 
 
-class Trace(object):
-    __metaclass__ = ABCMeta
-
+class Trace(object, metaclass=ABCMeta):
     @abstractmethod
     def to_json_dict(self):
         raise NotImplementedError
@@ -61,9 +57,8 @@ class Trace(object):
         raise NotImplementedError()
 
 
-class Justification(Trace):
+class Justification(Trace, metaclass=ABCMeta):
     """An object containing debug information explaining why an Action was chosen by the Policy."""
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def dumps(self):
@@ -227,9 +222,8 @@ class ActionScores(object):
         self._justification = j
 
 
-class Policy(Module):
+class Policy(Module, metaclass=ABCMeta):
     """A parameterized RL policy mapping states to actions."""
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def act(self, states, test=False):

@@ -14,14 +14,12 @@ def normalize_counts(counts):
     normed = Counter()
     total = float(sum(counts.values(), 0.0))
     assert total > 0  # cannot normalize empty Counter
-    for key, ct in counts.iteritems():
+    for key, ct in counts.items():
         normed[key] = ct / total
     return normed
 
 
-class ReplayBuffer(object):
-    __metaclass__ = ABCMeta
-
+class ReplayBuffer(object, metaclass=ABCMeta):
     @abstractmethod
     def sample(self, num_episodes):
         """Sample WITH replacement from the buffer.
@@ -161,7 +159,7 @@ class RewardPrioritizedReplayBuffer(ReplayBuffer):
         max = rewards[-1]
         mean = sum(rewards) / len(rewards)
 
-        return u'n={n:<4} mean={mean:.2f} range=[{min:.2f}, {max:.2f}] median={median:.2f}'.format(
+        return 'n={n:<4} mean={mean:.2f} range=[{min:.2f}, {max:.2f}] median={median:.2f}'.format(
             n=len(rewards), min=min, median=median, max=max, mean=mean)
 
 
@@ -230,7 +228,7 @@ class GroupedReplayBuffer(ReplayBuffer):
             grouped_episodes[self._episode_grouper(ep)].append(ep)
 
         # add the episodes to their respective buffers
-        for label, group in grouped_episodes.iteritems():
+        for label, group in grouped_episodes.items():
             self._group_buffers[label].extend(group)
 
     def __len__(self):
@@ -240,7 +238,7 @@ class GroupedReplayBuffer(ReplayBuffer):
         if len(self._group_buffers) == 0:
             return 'empty'
 
-        return '\n'.join(u'{}: {}'.format(buffer.status(), label)
+        return '\n'.join('{}: {}'.format(buffer.status(), label)
                          for label, buffer in self._group_buffers.items())
 
 
@@ -262,10 +260,10 @@ class GroupedReplayBufferTrace(Trace):
                 }
 
     def dumps(self):
-        return u'group stats:\n{}\nsample counts:\n{}'.format(
-            indent('\n'.join(u'{}: {}'.format(
+        return 'group stats:\n{}\nsample counts:\n{}'.format(
+            indent('\n'.join('{}: {}'.format(
                 trace.dumps(), label) for label, trace in self._group_traces.items())),
-            indent('\n'.join(u'{:<5}: {}'.format(c, k) for k, c in self._group_counts.items())),
+            indent('\n'.join('{:<5}: {}'.format(c, k) for k, c in self._group_counts.items())),
         )
 
 
@@ -278,7 +276,7 @@ class PrioritizedRewardReplayBufferTrace(Trace):
         self.mean = sum(self._rewards) / len(self._rewards)
 
     def dumps(self):
-        return u'n={n:<4} mean={mean:.2f} range=[{min:.2f}, {max:.2f}] median={median:.2f}'.format(
+        return 'n={n:<4} mean={mean:.2f} range=[{min:.2f}, {max:.2f}] median={median:.2f}'.format(
             n=len(self._rewards), min=self.min, median=self.median, max=self.max, mean=self.mean)
 
     def to_json_dict(self):
