@@ -41,8 +41,8 @@ class MiniWoBInstance(Thread):
     FLIGHT_WINDOW_HEIGHT = 700
     FLIGHT_TASK_WIDTH = 375
     FLIGHT_TASK_HEIGHT = 667
-    
-    def __init__(self, index, subdomain, seed, headless=False,
+
+    def __init__(self, index, subdomain, seed, headless=True,
             base_url=None, cache_state=False, threading=True,
             reward_processor=None, wait_ms=0., block_on_reset=True,
             refresh_freq=0, initial_mode='train'):
@@ -105,7 +105,7 @@ class MiniWoBInstance(Thread):
         self.record_screenshots = False
         if reward_processor is None:
             # Use the original reward
-            self.reward_processor = get_original_reward 
+            self.reward_processor = get_original_reward
         self.start_time = float('inf')
         self.task_queue = Queue()
         if not threading:
@@ -160,7 +160,7 @@ class MiniWoBInstance(Thread):
                     .format(self.window_width, self.window_height))
             options.add_argument('window-position={},{}'
                     .format(9000, 30 + self.index * (self.window_height + 30)))
-        self.driver = webdriver.Chrome(chrome_options=options)
+        self.driver = webdriver.Chrome(options=options)
         self.driver.implicitly_wait(5)
         if self.headless:
             self.driver.get(self.url)
@@ -278,16 +278,16 @@ class MiniWoBInstance(Thread):
         """
         if action is not None:
             if self.get_metadata()['done']:
-                logging.warn('Cannot call {} on instance {}, which is already done'
+                logging.warning('Cannot call {} on instance {}, which is already done'
                         .format(action, self.index))
             else:
                 action(self.driver)
         if self.wait_ms:
             time.sleep(self.wait_ms / 1000.)
-    
+
     def get_state(self):
         """Get the current state.
-        
+
         Returns:
             MiniWoBState
         """
@@ -307,10 +307,10 @@ class MiniWoBInstance(Thread):
             img = get_screenshot(self.driver, self.task_width, self.task_height)
             state.set_screenshot(img)
         return state
-    
+
     def get_metadata(self):
         """Get other metadata.
-        
+
         Returns:
             dict with the following keys:
             - done (bool)
