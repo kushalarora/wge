@@ -13,3 +13,4 @@ tqdm>=4.17.1
 gitpython>=2.1.6
 tensorboard_logger>=0.0.4
 twisted>=17.9.0
+regex>=2.5.82
